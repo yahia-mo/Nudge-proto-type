@@ -1,6 +1,6 @@
 # Database design
 
-```code sniped
+```mermaid
 
 erDiagram
     SESSIONS ||--o{ PARTS : "contains"
