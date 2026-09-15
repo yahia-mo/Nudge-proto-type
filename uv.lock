@@ -207,7 +207,7 @@ wheels = [
 [[package]]
 name = "nudge-proto-type"
 version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "openai" },
     { name = "sqlmodel" },

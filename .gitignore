@@ -1,7 +1,9 @@
 .venv
 database.db
 src/__pycache__/
-
+*__pycache__
+*/nudge_proto_type.egg-info/
+nudge_proto_type.egg-info/
 
 
 

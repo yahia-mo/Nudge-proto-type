@@ -9,3 +9,14 @@ dependencies = [
     "openai>=3.14.0",
     "sqlmodel>=0.0.42",
 ]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["src", "tests"]
+
+[project.scripts]
+
+test = "tests.integration_test:run_integration_test"

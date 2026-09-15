@@ -73,7 +73,7 @@ class LearningService:
             data = completion.choices[0].message.parsed
             if not data:
                 raise ValueError("Parsed output returned None.")
-        except Exception:
+        except Exception:  # noqa: BLE001
             raw_res = client.chat.completions.create(
                 model=DEFAULT_MODEL,
                 messages=[
@@ -157,7 +157,7 @@ class LearningService:
             )
             quiz_data = completion.choices[0].message.parsed
             questions_list = quiz_data.questions if quiz_data else []
-        except Exception:
+        except Exception:  # noqa: BLE001
             raw_res = client.chat.completions.create(
                 model=DEFAULT_MODEL,
                 messages=[
@@ -241,7 +241,7 @@ class LearningService:
             data = completion.choices[0].message.parsed
             if not data:
                 raise ValueError("Parsed output returned None.")
-        except Exception:
+        except Exception:  # noqa: BLE001
             raw_res = client.chat.completions.create(
                 model=DEFAULT_MODEL,
                 messages=[
