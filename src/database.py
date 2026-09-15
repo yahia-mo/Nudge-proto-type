@@ -18,8 +18,8 @@ class StudySession(SQLModel, table=True):
     created_at: datetime = Field(default_factory=datetime.now)
     
     #made a back_populates Relation ship and, if Delete item deletes all item which took his id as a Forein. 
-    parts: list["LessonPart"] = Relationship(back_populates="question.session", sa_relationship_kwargs={"cascade": "all, delete-orphan"})
-    questions: list["Question"] = Relationship(back_populates="question.session", sa_relationship_kwargs={"cascade": "all, delete-orphan"})
+    parts: list["LessonPart"] = Relationship(back_populates="session", sa_relationship_kwargs={"cascade": "all, delete-orphan"})
+    questions: list["Question"] = Relationship(back_populates="session", sa_relationship_kwargs={"cascade": "all, delete-orphan"})
 
 class LessonPart(SQLModel, table=True):
     
@@ -30,7 +30,7 @@ class LessonPart(SQLModel, table=True):
     content: str
     created_at: datetime = Field(default_factory=datetime.now)
 
-    session: StudySession = Relationship(back_populates="studysession.parts")
+    session: StudySession = Relationship(back_populates="parts")
 
 class Question(SQLModel, table=True):
 
@@ -42,7 +42,7 @@ class Question(SQLModel, table=True):
     correct_answer: str
     explanation: str
 
-    session: StudySession = Relationship(back_populates="studysession.questions")
+    session: StudySession = Relationship(back_populates="questions")
 
 def init_db():
     SQLModel.metadata.create_all(engine)
