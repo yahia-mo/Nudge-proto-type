@@ -1,0 +1,9 @@
+[project]
+name = "nudge-proto-type"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "sqlmodel>=0.0.42",
+]
