@@ -1,5 +1,9 @@
+from src.database import init_db
+
+
 def main():
-    print("Hello from nudge-proto-type!")
+    init_db();
+    
 
 
 if __name__ == "__main__":

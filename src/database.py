@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 
-from sqlmodel import Field, Relationship, SQLModel, create_engine
+from sqlmodel import Field, Relationship, Session, SQLModel, create_engine
 
 DATABASE_URL = "sqlite:///./database.db"
 
@@ -44,3 +44,9 @@ class Question(SQLModel, table=True):
 
     session: StudySession = Relationship(back_populates="studysession.questions")
 
+def init_db():
+    SQLModel.metadata.create_all(engine)
+
+def get_session():
+    with Session(engine) as session:
+        yield session
