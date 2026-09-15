@@ -1,10 +1,11 @@
 [project]
 name = "nudge-proto-type"
 version = "0.1.0"
-description = "Add your description here"
+description = "NUDGE helps students overcome learning inertia and procrastination caused by large or complex study goals."
 readme = "README.md"
 requires-python = ">=3.13"
 
 dependencies = [
+    "openai>=3.14.0",
     "sqlmodel>=0.0.42",
 ]
