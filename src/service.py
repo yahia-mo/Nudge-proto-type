@@ -200,4 +200,78 @@ class LearningService:
         db.commit()
         return saved_questions
 
-    
+    @staticmethod
+    def generate_next_part(
+        db: Session, session_id: uuid.UUID | str, api_key: str | None = None
+    ) -> dict[str, Any]:
+        """Generates the next logical micro-step preserving previous conversational context."""
+        target_uuid = uuid.UUID(str(session_id))
+        study_session = db.get(StudySession, target_uuid)
+        if not study_session:
+            raise ValueError(f"Session with ID {target_uuid} not found.")
+
+        # Compile historical context to prevent repetitive outputs
+        history_stmt = (
+            select(LessonPart)
+            .where(LessonPart.session_id == target_uuid)
+            .order_by(LessonPart.part_number)
+        )
+        history = list(db.exec(history_stmt).all())
+        history_summary = "\n".join(
+            [f"Part {p.part_number}: {p.title} - {p.content}" for p in history]
+        )
+
+        next_part_num = study_session.current_part + 1
+
+        client = get_llm_client(api_key)
+        prompt = (
+            f"Topic: '{study_session.topic}' (Proficiency Level: {study_session.level}).\n"
+            f"The learner has completed the following sequence:\n{history_summary}\n\n"
+            f"Now explain Part {next_part_num} as the direct subsequent micro-step. "
+            f"Keep it concise, actionable, and under 100 words."
+        )
+
+        try:
+            completion = client.beta.chat.completions.parse(
+                model=DEFAULT_MODEL,
+                messages=[{"role": "user", "content": prompt}],
+                response_format=MicroLessonSchema,
+                temperature=0.6,
+            )
+            data = completion.choices[0].message.parsed
+            if not data:
+                raise ValueError("Parsed output returned None.")
+        except Exception:
+            raw_res = client.chat.completions.create(
+                model=DEFAULT_MODEL,
+                messages=[
+                    {
+                        "role": "system",
+                        "content": 'Output strictly valid JSON matching: {"title": "...", "content": "..."}',
+                    },
+                    {"role": "user", "content": prompt},
+                ],
+                response_format={"type": "json_object"},
+                temperature=0.6,
+            )
+            content_str = raw_res.choices[0].message.content or "{}"
+            data = MicroLessonSchema(**json.loads(content_str))
+
+        new_part = LessonPart(
+            session_id=target_uuid,
+            part_number=next_part_num,
+            title=data.title,
+            content=data.content,
+        )
+        study_session.current_part = next_part_num
+
+        db.add(new_part)
+        db.add(study_session)
+        db.commit()
+
+        return {
+            "session_id": str(target_uuid),
+            "current_part": next_part_num,
+            "title": new_part.title,
+            "content": new_part.content,
+        }
