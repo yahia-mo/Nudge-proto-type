@@ -1,10 +1,13 @@
 import os
 
+from dotenv import load_dotenv
 from sqlmodel import Session
 
-from src.database import engine, init_db
+from src.core.database import engine, init_db
 from src.service import LearningService
 
+# load the env variables .
+load_dotenv()
 
 def run_integration_test():
     # Make sure the API key in env variables .
