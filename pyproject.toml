@@ -16,7 +16,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-packages = ["src", "tests"]
+packages = ["src", "src.core", "src.db", "src.llm", "src.services", "tests"]
 
 [project.scripts]
 

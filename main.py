@@ -1,4 +1,4 @@
-from src.database import init_db
+from src.core.database import init_db
 
 
 def main():
