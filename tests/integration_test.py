@@ -4,57 +4,102 @@ from dotenv import load_dotenv
 from sqlmodel import Session
 
 from src.core.database import engine, init_db
-from src.service import LearningService
+from src.services.learning import LearningService
 
-# load the env variables .
+
 load_dotenv()
 
-def run_integration_test():
-    # Make sure the API key in env variables .
 
+def run_integration_test():
     api_key = os.getenv("GROQ_API_KEY")
+
     if not api_key:
-        print("[-] Error: GROQ_API_KEY is not set. Check your env variables .")
+        print("[-] Error: GROQ_API_KEY is not set. Check your .env file.")
         return
 
     print("[+] GROQ_API_KEY detected.")
 
-    # 2. init the Tables .
     print("[+] Initializing SQLite database...")
     init_db()
 
     with Session(engine) as db:
-        # 3. test creating session and generate part ons .
+        # Step 1: Create a learning session
         topic_to_test = "Virtual Memory and Paging"
-        print(f"\n[+] Step 1: Creating session for topic: '{topic_to_test}'...")
-        
-        session_data = LearningService.create_session(
-            db=db, 
-            topic=topic_to_test, 
-            level="beginner"
+
+        print(
+            f"\n[+] Step 1: Creating session for topic: "
+            f"'{topic_to_test}'..."
         )
+
+        session_data = LearningService.create_session(
+            db=db,
+            topic=topic_to_test,
+            level="beginner",
+            available_time=1,
+        )
+
         session_id = session_data["session_id"]
-        
+
         print(f"    -> Session ID: {session_id}")
-        print(f"    -> Part 1 Title: {session_data['title']}")
+        print(f"    -> Part {session_data['current_part']} Title: "
+              f"{session_data['title']}")
         print(f"    -> Content: {session_data['content']}")
 
-        # 4. test generate the quiz .
-        print(f"\n[+] Step 2: Fetching/Generating questions for Part {session_data['current_part']}...")
-        questions = LearningService.get_or_generate_questions(db=db, session_id=session_id)
-        
-        for idx, q in enumerate(questions, 1):
-            print(f"    Q{idx}: {q['question']}")
-            for opt in q['options']:
-                print(f"       {opt}")
-            print(f"       [Correct: {q['correct_answer']}] - Reason: {q['explanation']}")
+        # Step 2: Generate or fetch questions
+        print(
+            f"\n[+] Step 2: Fetching/Generating questions "
+            f"for Part {session_data['current_part']}..."
+        )
 
-        # 5. test go to next part generation .
-        print("\n[+] Step 3: Generating Part 2 (Dependency test)...")
-        next_part = LearningService.generate_next_part(db=db, session_id=session_id)
-        
-        print(f"    -> Current Part Index: {next_part['current_part']}")
-        print(f"    -> Part 2 Title: {next_part['title']}")
+        questions = LearningService.get_or_generate_questions(
+            db=db,
+            session_id=session_id,
+        )
+
+        if not questions:
+            print("[-] No questions were generated.")
+            return
+
+        for idx, question in enumerate(questions, 1):
+            print(f"\n    Q{idx}: {question['question']}")
+
+            for option in question["options"]:
+                print(f"       {option}")
+
+        # Step 3: Submit answers
+        print("\n[+] Step 3: Submitting answers...")
+
+        for idx, question in enumerate(questions, 1):
+            selected_answer = question["options"][0][0]
+
+            result = LearningService.submit_answer(
+                db=db,
+                session_id=session_id,
+                question_id=question["id"],
+                selected_answer=selected_answer,
+            )
+
+            print(
+                f"    -> Q{idx}: "
+                f"{'Correct' if result['is_correct'] else 'Incorrect'}"
+            )
+
+            if not result["is_correct"]:
+                print(f"       Explanation: {result['explanation']}")
+
+        # Step 4: Generate the next adaptive learning step
+        print("\n[+] Step 4: Generating adaptive next step...")
+
+        next_part = LearningService.generate_next_part(
+            db=db,
+            session_id=session_id,
+        )
+
+        print(
+            f"    -> Current Part Index: "
+            f"{next_part['current_part']}"
+        )
+        print(f"    -> Title: {next_part['title']}")
         print(f"    -> Content: {next_part['content']}")
 
     print("\n[✓] All integration steps completed successfully!")
