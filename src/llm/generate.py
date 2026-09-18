@@ -18,6 +18,7 @@ def generate_parsed(
             messages=[{"role": "user", "content": prompt}],
             response_format=schema,
             temperature=temperature,
+            max_tokens=500,
         )
         data = completion.choices[0].message.parsed
         if not data:

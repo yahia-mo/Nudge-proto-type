@@ -4,11 +4,18 @@ from typing import Any
 
 from sqlmodel import Session, select
 
-from .models import LessonPart, Question, StudySession
+from .models import LessonPart, Question, StudentAnswer, StudySession
 
 
-def create_study_session(db: Session, topic: str, level: str) -> StudySession:
-    study_session = StudySession(topic=topic, level=level, current_part=1)
+def create_study_session(
+    db: Session, topic: str, level: str, available_time: int
+) -> StudySession:
+    study_session = StudySession(
+        topic=topic,
+        level=level,
+        available_time=available_time,
+        current_part=1,
+    )
     db.add(study_session)
     db.commit()
     db.refresh(study_session)
@@ -92,3 +99,11 @@ def set_current_part(db: Session, study_session: StudySession, part_number: int)
     study_session.current_part = part_number
     db.add(study_session)
     db.commit()
+
+def get_student_answers(
+    db: Session, session_id: uuid.UUID | str
+) -> list[StudentAnswer]:
+    stmt = select(StudentAnswer).where(
+        StudentAnswer.session_id == uuid.UUID(str(session_id))
+    )
+    return list(db.exec(stmt).all())

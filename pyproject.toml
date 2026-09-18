@@ -7,8 +7,10 @@ requires-python = ">=3.13"
 
 dependencies = [
     "dotenv>=0.9.9",
+    "fastapi>=0.141.1",
     "openai>=3.14.0",
     "sqlmodel>=0.0.42",
+    "uvicorn[standard]>=0.53.0",
 ]
 
 [build-system]
@@ -16,7 +18,16 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-packages = ["src", "src.core", "src.db", "src.llm", "src.services", "tests"]
+packages = [
+    "src",
+    "src.api",
+    "src.api.routes",
+    "src.core",
+    "src.db",
+    "src.llm",
+    "src.services",
+    "tests",
+]
 
 [project.scripts]
 
