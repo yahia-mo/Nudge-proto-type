@@ -1,10 +1,14 @@
+from fastapi import FastAPI
+from src.api.routes.sessions import router as sessions_router
+
 from src.core.database import init_db
 
+app = FastAPI(title="NUDGE API")
+app.include_router(sessions_router)
 
-def main():
-    init_db();
-    
+init_db()
 
 
-if __name__ == "__main__":
-    main()
+@app.get("/")
+def root():
+    return {"message": "NUDGE API is running"}

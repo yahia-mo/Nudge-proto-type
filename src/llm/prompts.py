@@ -23,10 +23,23 @@ def build_quiz_prompt(content: str) -> str:
     )
 
 
-def build_next_part_prompt(topic: str, level: str, history_summary: str, next_part_num: int) -> str:
+
+def build_next_part_prompt(
+    topic: str,
+    level: str,
+    history_summary: str,
+    next_part_num: int,
+    accuracy: float,
+) -> str:
+
     return (
         f"Topic: '{topic}' (Proficiency Level: {level}).\n"
         f"The learner has completed the following sequence:\n{history_summary}\n\n"
-        f"Now explain Part {next_part_num} as the direct subsequent micro-step. "
+        f"The learner's current quiz accuracy is {accuracy:.0%}.\n\n"
+        f"If accuracy is below 60%, DO NOT introduce a new concept. "
+        f"Instead, reinforce the previous concept, simplify it, and give a small practice action. "
+        f"Clearly treat this as reinforcement of the previous part, not as a new micro-step.\n\n"
+        f"If accuracy is 60% or higher, continue to the next micro-step "
+        f"and explain Part {next_part_num} as the direct subsequent concept.\n\n"
         f"Keep it concise, actionable, and under 100 words."
     )
