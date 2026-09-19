@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NUDGE_AI | Master Anything</title>
+    <link rel="icon" href="data:,🎯">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .blob-1 {
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 500px;
+            height: 500px;
+            background: rgba(59, 130, 246, 0.3);
+            filter: blur(100px);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .blob-2 {
+            position: absolute;
+            bottom: -10%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: rgba(147, 51, 234, 0.2);
+            filter: blur(120px);
+            border-radius: 50%;
+            z-index: -1;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 min-h-screen overflow-x-hidden relative flex flex-col">
+
+    <div class="blob-1"></div>
+    <div class="blob-2"></div>
+
+    <nav class="w-full max-w-7xl mx-auto py-6 px-8 flex justify-between items-center z-10">
+        <div class="flex items-center gap-3">
+            <div class="bg-blue-600 text-white p-2 rounded-lg shadow-lg shadow-blue-500/30">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+            </div>
+            <span class="text-xl font-extrabold tracking-tight text-slate-900">NUDGE_AI</span>
+        </div>
+        <div class="text-sm font-semibold text-slate-500 hover:text-blue-600 cursor-pointer transition">Hackathon 2026
+        </div>
+    </nav>
+
+    <main
+        class="flex-1 w-full max-w-7xl mx-auto px-8 py-12 flex flex-col lg:flex-row items-center justify-between gap-16 z-10">
+
+        <div class="w-full lg:w-1/2 flex flex-col gap-6">
+            <div
+                class="inline-block px-4 py-2 bg-blue-100 text-blue-700 font-bold text-xs rounded-full w-max uppercase tracking-wider mb-2 border border-blue-200">
+                🚀 AI-Powered Micro-Learning
+            </div>
+            <h1 class="text-5xl lg:text-6xl font-extrabold leading-tight text-slate-900">
+                Master Complex Topics in <span
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Bite-Sized</span>
+                Steps.
+            </h1>
+            <p class="text-lg text-slate-600 leading-relaxed max-w-md">
+                Tell us what you want to learn, and NUDGE_AI will generate a personalized, adaptive roadmap. No
+                overwhelming courses, just action.
+            </p>
+
+            <div class="flex flex-col gap-4 mt-6">
+                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                    <div class="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center">✓
+                    </div>
+                    Dynamically generated roadmaps
+                </div>
+                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                    <div class="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center">✓
+                    </div>
+                    Interactive quizzes with AI Feedback
+                </div>
+                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                    <div class="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center">✓
+                    </div>
+                    Adapts to your available time
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full lg:w-5/12">
+            <div
+                class="bg-white/80 backdrop-blur-xl p-8 rounded-3xl shadow-2xl border border-white/50 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 to-purple-500"></div>
+
+                <h2 class="text-2xl font-bold text-slate-800 mb-6">Start Your Journey</h2>
+
+                <form id="start-form" class="flex flex-col gap-5">
+                    <div>
+                        <label class="block text-sm font-bold mb-2 text-slate-700">What do you want to learn?</label>
+                        <input type="text" id="topic" placeholder="e.g., Python Basics, Quantum Physics"
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold mb-2 text-slate-700">Difficulty Level</label>
+                        <select id="level"
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all appearance-none">
+                            <option value="beginner">🌱 Beginner</option>
+                            <option value="intermediate">🚀 Intermediate</option>
+                            <option value="advanced">🧠 Advanced</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold mb-2 text-slate-700">Time Commitment</label>
+                        <div class="flex gap-3">
+                            <input type="number" id="time-val" value="1" min="1" max="365"
+                                class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all">
+
+                            <select id="time-unit"
+                                class="w-32 bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all appearance-none">
+                                <option value="hours" selected>Hours</option>
+                                <option value="days">Days</option>
+                                <option value="weeks">Weeks</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <p id="error-msg"
+                        class="text-red-500 text-sm hidden font-semibold bg-red-50 p-3 rounded-lg border border-red-100">
+                    </p>
+
+                    <button type="submit" id="submit-btn"
+                        class="w-full bg-slate-900 text-white font-bold py-4 rounded-xl mt-2 hover:bg-blue-600 hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300 flex justify-center items-center gap-2 group">
+                        <span id="btn-text">Generate Roadmap</span>
+                        <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const API_URL = "http://127.0.0.1:8000/api/sessions";
+
+        function convertToHours(value, unit) {
+            const multipliers = { hours: 1, days: 24, weeks: 24 * 7 };
+            const hours = Math.round(value * multipliers[unit]);
+            return Math.max(hours, 1);
+        }
+
+        document.getElementById('start-form').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            let topic = document.getElementById('topic').value.trim();
+            let level = document.getElementById('level').value;
+            let timeVal = Number(document.getElementById('time-val').value);
+            let timeUnit = document.getElementById('time-unit').value;
+
+            let errorMsg = document.getElementById('error-msg');
+            let btn = document.getElementById('submit-btn');
+
+            if (!topic || !timeVal || timeVal <= 0) {
+                errorMsg.textContent = "Please enter valid info to start.";
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+
+            errorMsg.classList.add('hidden');
+            btn.disabled = true;
+            document.getElementById('btn-text').innerText = "Building Path...";
+            btn.classList.add('animate-pulse', 'bg-blue-600');
+
+            let totalHours = timeVal;
+            if (timeUnit === 'days') totalHours = timeVal * 24;
+            if (timeUnit === 'weeks') totalHours = timeVal * 24 * 7;
+
+            try {
+                let res = await fetch(`${API_URL}/start`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        topic: topic,
+                        level: level,
+                        available_time: totalHours
+                    })
+                });
+
+                if (!res.ok) throw new Error("server error");
+                let data = await res.json();
+
+                console.log("session started:", data);
+
+                localStorage.setItem("session_id", data.session_id);
+                localStorage.setItem("topic", topic);
+                localStorage.setItem("current_part", data.current_part);
+                localStorage.setItem("title", data.title);
+                localStorage.setItem("content", data.content);
+                localStorage.setItem("completed_parts", JSON.stringify([]));
+
+                window.location.href = "roadmap.html";
+
+            } catch (error) {
+                console.log(error);
+                errorMsg.textContent = "Backend is not running!";
+                errorMsg.classList.remove('hidden');
+
+                btn.disabled = false;
+                document.getElementById('btn-text').innerText = "Generate Roadmap";
+                btn.classList.remove('animate-pulse', 'bg-blue-600');
+            }
+        });
+    </script>
+</body>
+
+</html>
