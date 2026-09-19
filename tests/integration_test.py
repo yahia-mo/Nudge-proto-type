@@ -1,11 +1,11 @@
 import os
 
 from dotenv import load_dotenv
-from sqlmodel import Session
+from sqlmodel import Session, select
 
 from src.core.database import engine, init_db
+from src.db.models import Question
 from src.services.learning import LearningService
-
 
 load_dotenv()
 
@@ -23,7 +23,7 @@ def run_integration_test():
     init_db()
 
     with Session(engine) as db:
-        # Step 1: Create a learning session
+        # Step 1: Create a learning session and generate Part 1
         topic_to_test = "Virtual Memory and Paging"
 
         print(
@@ -41,8 +41,10 @@ def run_integration_test():
         session_id = session_data["session_id"]
 
         print(f"    -> Session ID: {session_id}")
-        print(f"    -> Part {session_data['current_part']} Title: "
-              f"{session_data['title']}")
+        print(
+            f"    -> Part {session_data['current_part']} Title: "
+            f"{session_data['title']}"
+        )
         print(f"    -> Content: {session_data['content']}")
 
         # Step 2: Generate or fetch questions
@@ -66,26 +68,44 @@ def run_integration_test():
             for option in question["options"]:
                 print(f"       {option}")
 
-        # Step 3: Submit answers
+        # The API hides correct answers from the frontend.
+        # The integration test reads them directly from the database.
+        db_questions = db.exec(
+            select(Question).where(
+                Question.session_id == session_id,
+                Question.part_number == session_data["current_part"],
+            )
+        ).all()
+
+        correct_answers = {
+            question.id: question.correct_answer
+            for question in db_questions
+        }
+
+        # Step 3: Submit correct answers and verify answer evaluation
         print("\n[+] Step 3: Submitting answers...")
 
-        for idx, question in enumerate(questions, 1):
-            selected_answer = question["options"][0][0]
+        for question in questions:
+            question_id = question["id"]
+            correct_answer = correct_answers[question_id]
 
             result = LearningService.submit_answer(
                 db=db,
                 session_id=session_id,
-                question_id=question["id"],
-                selected_answer=selected_answer,
+                question_id=question_id,
+                selected_answer=correct_answer,
             )
 
             print(
-                f"    -> Q{idx}: "
+                f"    -> Q{question_id}: "
                 f"{'Correct' if result['is_correct'] else 'Incorrect'}"
             )
 
             if not result["is_correct"]:
-                print(f"       Explanation: {result['explanation']}")
+                print(
+                    f"       Explanation: "
+                    f"{result['explanation']}"
+                )
 
         # Step 4: Generate the next adaptive learning step
         print("\n[+] Step 4: Generating adaptive next step...")
