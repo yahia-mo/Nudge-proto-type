@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workspace - NUDGE_AI</title>
+    <link rel="icon" href="data:,🎯">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body class="text-slate-800 min-h-screen flex flex-col">
+
+    <nav class="w-full bg-white border-b border-slate-200 py-4 px-6 flex justify-between items-center z-50">
+        <div class="flex items-center gap-2">
+            <span class="text-xl">🎯</span>
+            <span class="text-lg font-bold text-slate-900 tracking-tight">NUDGE_AI</span>
+        </div>
+        <button onclick="window.location.href='roadmap.html'"
+            class="text-sm font-semibold text-slate-500 hover:text-slate-800 flex items-center gap-1 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18">
+                </path>
+            </svg>
+            Back to Roadmap
+        </button>
+    </nav>
+
+    <main class="flex-1 w-full max-w-3xl mx-auto px-4 py-8 flex flex-col">
+
+        <div class="mb-8" id="header-container">
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-6" id="lesson-title">Loading Lesson...</h1>
+
+            <div class="flex items-center justify-between relative" id="stepper">
+                <div class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-slate-200 z-0 rounded-full"></div>
+                <div class="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-blue-600 z-0 rounded-full transition-all duration-500"
+                    id="stepper-progress" style="width: 15%"></div>
+
+                <div class="relative z-10 flex flex-col items-center gap-2" id="step-1-indicator">
+                    <div
+                        class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold shadow-md shadow-blue-200">
+                        1</div>
+                    <span class="text-xs font-bold text-blue-600 uppercase">Learn</span>
+                </div>
+                <div class="relative z-10 flex flex-col items-center gap-2" id="step-2-indicator">
+                    <div
+                        class="w-8 h-8 rounded-full bg-slate-200 text-slate-400 flex items-center justify-center font-bold transition-colors">
+                        2</div>
+                    <span class="text-xs font-bold text-slate-400 uppercase transition-colors">Action</span>
+                </div>
+                <div class="relative z-10 flex flex-col items-center gap-2" id="step-3-indicator">
+                    <div
+                        class="w-8 h-8 rounded-full bg-slate-200 text-slate-400 flex items-center justify-center font-bold transition-colors">
+                        3</div>
+                    <span class="text-xs font-bold text-slate-400 uppercase transition-colors">Verify</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 sm:p-10 rounded-3xl shadow-sm border border-slate-200 flex-1 relative overflow-hidden">
+
+            <div id="section-summary" class="step-section fade-in">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl">
+                        📖</div>
+                    <h2 class="text-xl font-bold text-slate-800">Brief Summary</h2>
+                </div>
+                <div id="lesson-content" class="text-slate-600 text-lg leading-relaxed mb-8 whitespace-pre-wrap"></div>
+                <button onclick="showStep('section-task', 2)"
+                    class="w-full sm:w-auto bg-slate-900 text-white font-bold py-3 px-8 rounded-xl hover:bg-blue-600 transition-colors shadow-md flex items-center justify-center gap-2 ml-auto">
+                    Understood, continue <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div id="section-task" class="step-section hidden fade-in">
+                <div class="flex items-center gap-3 mb-6">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center text-xl">
+                        ⚡</div>
+                    <h2 class="text-xl font-bold text-slate-800">Action Task</h2>
+                </div>
+                <div class="bg-amber-50/50 border border-amber-100 p-6 rounded-2xl mb-8">
+                    <p class="text-slate-800 font-semibold mb-2">Your micro-task for this part:</p>
+                    <p class="text-slate-600 text-sm leading-relaxed">Read the summary carefully and try to explain the
+                        core concept out loud in your own words. Check the box below once you are ready for the quiz.
+                    </p>
+                </div>
+
+                <label
+                    class="flex items-start gap-4 mb-8 cursor-pointer p-4 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
+                    <input type="checkbox" id="task-check"
+                        class="w-6 h-6 text-blue-600 rounded border-slate-300 focus:ring-blue-500 mt-0.5 cursor-pointer"
+                        onchange="checkTask()">
+                    <div>
+                        <span class="text-slate-800 font-semibold block">I have completed this task</span>
+                        <span class="text-slate-500 text-sm">I'm ready to take the quiz to unlock the next part.</span>
+                    </div>
+                </label>
+
+                <button id="btn-to-quiz" disabled onclick="fetchQuiz()"
+                    class="w-full sm:w-auto bg-slate-200 text-slate-400 font-bold py-3 px-8 rounded-xl cursor-not-allowed transition-all ml-auto block">
+                    Take the Quiz &rarr;
+                </button>
+            </div>
+
+            <div id="section-quiz" class="step-section hidden fade-in">
+                <div class="flex items-center gap-3 mb-6">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center text-xl">
+                        🧠</div>
+                    <h2 class="text-xl font-bold text-slate-800">Quick Verification</h2>
+                </div>
+
+                <div id="quiz-container" class="flex flex-col gap-6 mb-6"></div>
+
+                <button id="submit-quiz-btn" onclick="submitQuiz()"
+                    class="w-full bg-slate-900 text-white font-bold py-4 rounded-xl hover:bg-blue-600 transition-colors hidden shadow-md">
+                    Submit Answer
+                </button>
+
+                <div id="quiz-feedback" class="hidden mt-4"></div>
+            </div>
+
+            <div id="section-completion" class="step-section hidden fade-in text-center py-12">
+                <div
+                    class="w-24 h-24 mx-auto bg-gradient-to-tr from-amber-300 to-amber-500 rounded-full flex items-center justify-center text-5xl shadow-xl shadow-amber-200 mb-6">
+                    🏆</div>
+                <h2 class="text-3xl font-extrabold text-slate-900 mb-4">Journey Completed!</h2>
+                <p class="text-slate-600 mb-10 max-w-sm mx-auto leading-relaxed">
+                    Amazing work! You've successfully mastered all the micro-lessons for <span
+                        class="font-bold text-slate-800" id="completed-topic-name"></span>.
+                </p>
+                <button onclick="localStorage.clear(); window.location.href='index.html'"
+                    class="bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold py-4 px-10 rounded-xl hover:shadow-lg hover:shadow-blue-500/30 transition-all transform hover:-translate-y-1">
+                    Start a New Journey 🚀
+                </button>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        const API_URL = "http://127.0.0.1:8000/api/sessions";
+
+        let sessionId = localStorage.getItem("session_id");
+        let topic = localStorage.getItem("topic") || "";
+        let currentPart = Number(localStorage.getItem("current_part")) || 1;
+        let currentTitle = localStorage.getItem("title") || "Concept";
+        let content = localStorage.getItem("content") || "";
+
+        let questions = [];
+        let currentQuestionIndex = 0;
+
+        document.getElementById('lesson-title').innerText = `Part ${currentPart}: ${currentTitle}`;
+        document.getElementById('lesson-content').innerText = content;
+        document.getElementById('completed-topic-name').innerText = topic;
+
+        function showStep(sectionId, stepNum) {
+            document.querySelectorAll('.step-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(sectionId).classList.remove('hidden');
+
+            if (sectionId === 'section-task') {
+                document.getElementById('task-check').checked = false;
+                checkTask();
+            }
+
+            if (stepNum <= 3) {
+                let w = stepNum === 1 ? "15%" : (stepNum === 2 ? "50%" : "100%");
+                document.getElementById('stepper-progress').style.width = w;
+
+                for (let i = 1; i <= 3; i++) {
+                    let ind = document.getElementById(`step-${i}-indicator`);
+                    let circle = ind.querySelector('div');
+                    let text = ind.querySelector('span');
+
+                    if (i <= stepNum) {
+                        circle.className = "w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold shadow-md shadow-blue-200 transition-colors";
+                        text.className = "text-xs font-bold text-blue-600 uppercase transition-colors";
+                    }
+                }
+            }
+        }
+
+        function checkTask() {
+            let btn = document.getElementById('btn-to-quiz');
+            if (document.getElementById('task-check').checked) {
+                btn.disabled = false;
+                btn.className = "w-full sm:w-auto bg-slate-900 text-white font-bold py-3 px-8 rounded-xl hover:bg-blue-600 transition-all ml-auto block shadow-md";
+            } else {
+                btn.disabled = true;
+                btn.className = "w-full sm:w-auto bg-slate-200 text-slate-400 font-bold py-3 px-8 rounded-xl cursor-not-allowed transition-all ml-auto block";
+            }
+        }
+
+        async function fetchQuiz() {
+            let btn = document.getElementById('btn-to-quiz');
+            btn.innerHTML = `Loading...`;
+            btn.disabled = true;
+
+            showStep('section-quiz', 3);
+
+            try {
+                let res = await fetch(`${API_URL}/${sessionId}/questions`, {
+                    method: 'POST'
+                });
+
+                if (!res.ok) throw new Error("API err");
+
+                questions = await res.json();
+                console.log("quiz:", questions);
+
+                if (!Array.isArray(questions) || questions.length === 0) {
+                    throw new Error("No questions returned");
+                }
+
+                currentQuestionIndex = 0;
+                renderQuestion();
+
+            } catch (err) {
+                console.log(err);
+                document.getElementById('quiz-container').innerHTML =
+                    `<p class="text-red-500">Failed to load quiz.</p>`;
+            }
+        }
+
+        function renderQuestion() {
+            let q = questions[currentQuestionIndex];
+
+            document.getElementById('quiz-feedback').classList.add('hidden');
+
+            let optsHTML = (q.options || []).map(opt => `
+        <label class="flex items-center gap-3 p-4 bg-white border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 hover:border-blue-300 transition-all group">
+            <input
+                type="radio"
+                name="quiz"
+                value="${opt.replace(/"/g, '&quot;')}"
+                class="w-5 h-5 text-blue-600 border-slate-300 focus:ring-blue-500"
+            >
+            <span class="text-slate-600 text-sm group-hover:text-slate-900 transition-colors">${opt}</span>
+        </label>
+    `).join('');
+
+            document.getElementById('quiz-container').innerHTML = `
+        <div class="flex justify-between items-center mb-5">
+            <p class="font-bold text-slate-800 text-lg">
+                Question ${currentQuestionIndex + 1} of ${questions.length}
+            </p>
+        </div>
+
+        <p class="font-bold text-slate-800 mb-5 text-lg">
+            ${q.question}
+        </p>
+
+        <div class="flex flex-col gap-3">
+            ${optsHTML}
+        </div>
+    `;
+
+            let btn = document.getElementById('submit-quiz-btn');
+            btn.classList.remove('hidden');
+            btn.innerText = "Submit Answer";
+            btn.disabled = false;
+        }
+
+
+        async function submitQuiz() {
+            let selected = document.querySelector('input[name="quiz"]:checked');
+            let feedback = document.getElementById('quiz-feedback');
+            let btn = document.getElementById('submit-quiz-btn');
+
+            if (!selected) {
+                feedback.innerHTML =
+                    `<p class="text-red-500 font-semibold mb-3 text-sm">Please select an answer.</p>`;
+                feedback.className = "block text-center fade-in";
+                return;
+            }
+
+            let currentQuestion = questions[currentQuestionIndex];
+
+            document.querySelectorAll('input[name="quiz"]').forEach(r => r.disabled = true);
+
+            btn.innerText = "Checking...";
+            btn.disabled = true;
+            feedback.classList.add('hidden');
+
+            try {
+                let res = await fetch(`${API_URL}/${sessionId}/answer`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        question_id: currentQuestion.id,
+                        selected_answer: selected.value
+                    })
+                });
+
+                if (!res.ok) throw new Error("Answer API error");
+
+                let result = await res.json();
+
+                if (result.is_correct) {
+                    feedback.innerHTML = `
+                <div class="flex items-center justify-center gap-2">
+                    <span class="text-xl">✅</span>
+                    <strong class="text-emerald-800">Correct!</strong>
+                </div>
+            `;
+                    feedback.className =
+                        "p-4 rounded-xl text-sm bg-emerald-50 border border-emerald-100 block text-center fade-in";
+                } else {
+                    feedback.innerHTML = `
+                <div class="text-red-600 mb-1 font-bold text-lg">❌ Incorrect</div>
+                <div class="bg-gradient-to-br from-purple-50 to-indigo-50 border border-purple-100 p-5 mt-4 rounded-xl shadow-sm text-left">
+                    <h4 class="text-purple-800 font-bold mb-1">AI Explanation</h4>
+                    <p class="text-purple-900 text-sm">
+                        ${result.explanation || "Review the lesson again."}
+                    </p>
+                </div>
+            `;
+                    feedback.className =
+                        "p-5 rounded-xl text-sm bg-red-50 border border-red-100 block fade-in";
+                }
+
+                feedback.classList.remove('hidden');
+
+                setTimeout(() => {
+                    currentQuestionIndex++;
+
+                    if (currentQuestionIndex < questions.length) {
+                        renderQuestion();
+                    } else {
+                        loadNextStep();
+                    }
+                }, 1000);
+
+            } catch (err) {
+                console.log(err);
+
+                feedback.innerHTML =
+                    `<p class="text-red-500">Error submitting answer.</p>`;
+                feedback.className = "block text-center";
+                feedback.classList.remove('hidden');
+
+                btn.innerText = "Submit Answer";
+                btn.disabled = false;
+            }
+        }
+        async function loadNextStep() {
+            try {
+                let res = await fetch(`${API_URL}/${sessionId}/next`, { method: 'POST' });
+                let data = await res.json();
+
+                console.log("next:", data);
+
+                if (data.is_last || !data.content) {
+                    document.querySelectorAll('.step-section').forEach(el => el.classList.add('hidden'));
+                    document.getElementById('section-completion').classList.remove('hidden');
+                    document.getElementById('header-container').classList.add('hidden');
+                    return;
+                }
+
+                if (data.current_part !== currentPart) {
+                    let completed = JSON.parse(localStorage.getItem("completed_parts") || "[]");
+                    completed.push({ part_number: currentPart, title: currentTitle });
+                    localStorage.setItem("completed_parts", JSON.stringify(completed));
+                }
+
+                localStorage.setItem("current_part", data.current_part);
+                localStorage.setItem("title", data.title);
+                localStorage.setItem("content", data.content);
+
+                window.location.href = "roadmap.html";
+
+            } catch (err) {
+                console.log(err);
+                alert("Error moving to next part.");
+            }
+        }
+    </script>
+</body>
+
+</html>
